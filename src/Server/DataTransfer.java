@@ -34,15 +34,19 @@ public class DataTransfer implements Runnable{
 			reader = new BufferedReader(new InputStreamReader(input));
 			writer = new PrintWriter(output,true);
 			
+			//get request
 			String line = reader.readLine();
 			System.out.println(line);
 			String[] split = line.split(":");
+			
+			//process request
 			if(split[0].equals("POST")){
 				postProcess(split[1]);
 			}
 			else{
-				getProcess(split[1]);
+				getProcess(split[1],split[2]);
 			}
+			//close connection
 			reader.close();
 			writer.close();
 			input.close();
@@ -50,6 +54,16 @@ public class DataTransfer implements Runnable{
 			socket.close();
 		} catch (IOException e) {
 			// TODO Auto-generated catch block
+			try {
+				reader.close();
+				writer.close();
+				input.close();
+				output.close();
+				socket.close();
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
 			e.printStackTrace();
 		}
 	}
@@ -66,11 +80,11 @@ public class DataTransfer implements Runnable{
 		else{
 			db.insertUser(infor);
 		}
-		if(db.searchSongAndUser(infor[7], infor[0])){
-			db.updateMusic(infor[7], infor[0], Integer.valueOf(infor[8]), Integer.valueOf(infor[9]), infor[10]);
+		if(db.searchSongAndUser(infor[5], infor[0])){
+			db.updateMusic(infor[5], infor[0], Integer.valueOf(infor[6]), Integer.valueOf(infor[7]), infor[8]);
 		}
 		else{
-			db.insertMusic(infor[7], infor[0], Integer.valueOf(infor[8]), Integer.valueOf(infor[9]), infor[10]);
+			db.insertMusic(infor[5], infor[0], Integer.valueOf(infor[6]), Integer.valueOf(infor[7]), infor[8]);
 		}
 		
 		writer.println("ok");
@@ -81,9 +95,9 @@ public class DataTransfer implements Runnable{
 	 * @param infor
 	 * @return
 	 */
-	public void getProcess(String song){
+	public void getProcess(String song,String option){
 		Database db = new Database();
-		ArrayList<String[]> results = db.getSameMusicListening(song);
+		ArrayList<String[]> results = db.getSameMusicListening(song,option);
 		for (int index = 0; index < results.size(); index++) {
 			String[] result = results.get(index);
 			String data = prepareData(result);

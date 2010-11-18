@@ -149,8 +149,8 @@ public class Client implements Runnable {
 	/**
 	 * test class
 	 */
-//
-//	public static void main(String args[]) {
+
+	public static void main(String args[]) {
 //		// post
 //		System.out.println("post");
 //		String data = "nghia,11,male,111,223,ssd,fff,for ever,12,13,nothing\n";
@@ -165,6 +165,10 @@ public class Client implements Runnable {
 //		connect.setData(data);
 //		thread = new Thread(connect);
 //		thread.start();
-//	}
+		
+		String str = "abc.mp3";
+		String[] split = str.split("\\.");
+		System.out.println(split.length);
+	}
 }
 
